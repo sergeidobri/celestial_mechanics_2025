@@ -37,7 +37,6 @@ AGECS_coords = np.matrix([  # координаты в АГЭСК
 # 2. Рассчет трансверсальной и радиальной скоростей (v_t, v_r):
 orbital_parameter = semi_major_axis * (1 - eccentricity ** 2)  # км
 
-print(eccentricity)
 v_r = (GRAVITATIONAL_PARAMETER / orbital_parameter) ** 0.5 * eccentricity * np.sin(true_anomaly)  # км/c
 v_t = (GRAVITATIONAL_PARAMETER / orbital_parameter) ** 0.5 * (1 + eccentricity * np.cos(true_anomaly))  # км/c
 v = (v_r**2 + v_t**2) ** 0.5  # км/c
@@ -98,6 +97,43 @@ for force, density in densities:
 
 g = GRAVITATIONAL_CONSTANT * EARTH_MASS / ((EARTH_RADIUS + H) * 1e3)**2
 
+# 5. Соответствующий форматированный вывод результатов
+print(f"\t---Орбита---")
+print(f"Большая полуось: {semi_major_axis:.2f} км")
+print(f"Эксцентриситет: {eccentricity:.6f}")
+print(f"Орбитальный параметр: {orbital_parameter:.2f} км")
+
+print(f"\n ---Положение космического аппарата---")
+print(f"Момент времени после прохождения аппаратом перицентра: {time_moment:.2f} с")
+print(f"Эксцентрическая аномалия: {eccentric_anomaly:.4f} радиан")
+print(f"Истинная аномалия: {true_anomaly:.4f} радиан")
+print(f"Координаты в АГЭСК [x_a, y_a, z_a]: ({x_a:.2f} км, {y_a:.2f} км, {z_a:.2f} км)")
+print(f"Координаты в ГСК [x, y, z]: ({x:.2f} км, {y:.2f} км, {z:.2f} км)")
+print(f"Геодезические координаты [L, B, H]: ({L:.2f} рад, {B:.2f} рад, {H:.2f} км)")
+
+print(f"\n ---Скорость космического аппарата---")
+print(f"Радиальная состовляющая скорости: {v_r:.4f} км/c")
+print(f"Трансверсальная состовляющая скорости: {v_t:.4f} км/c")
+print(f"Модуль скорости: {v:.4f} км/c")
+print(f"Гравитационное ускорение космического аппарата: {g:.4f} м/c^2")
+
+print(f"\n\t---Атмосфера---")
+print(f"При средней аномалии:", "\033[33m{}\033[0m".format(round(MEDIUM_ANOMALY * 180 / np.pi)) + " градусов")
+print(f"{'Ур-нь солн. акт-ности, 10^-22 Вт/м^2*Гц':>40s} | {'Плотность атмосферы, кг/км^3'}")
+print("-"*41 + "|" + "-"*30)
+for force, density in densities:
+    print(f"{force:>40} | {density:.3f}")
+print("-"*71)
+
+print(f"\n\t---Возмущения---")
+print(f"При средней аномалии:", "\033[33m{}\033[0m".format(round(MEDIUM_ANOMALY * 180 / np.pi)) + " градусов")
+print(f"{'Ур-нь солн. акт-ности, 10^-22 Вт/м^2*Гц':>40s} | {'S, км/c^2':>10s} | {'T, км/c^2':>10s} | {'W, км/c^2':>10s} | {'Полное возмущение, км/c^2':>10s}")
+print("-"*41 + "|" + "-"*12 + "|" +  "-"*12 + "|" + "-"*12 + "|" + "-"*30)
+for force, S, T, W in zip(force_array, S_array, T_array, W_array):
+    print(f"{force:>40} | {S:>10.3e} | {T:>10.3e} | {W:>10.3e} | {(S**2 + T**2 + W**2)**0.5:>10.3e}")
+print("-"*110)
+
+# 6. Изображение графиков
 fig, (ax_top, ax_bot) = plt.subplots(nrows=2, ncols=1, figsize=(8, 10))
 
 ax_top.grid(True)

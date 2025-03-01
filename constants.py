@@ -7,7 +7,7 @@ PERICENTRE_HEIGHT = 240                        # км
 INCLINATION = 10 * np.pi / 180                 # радиан
 ASC_NODE_LONGITUDE = 5 * np.pi / 180           # радиан
 PERICENTRE_ARGUMENT = 0 * np.pi / 180          # радиан
-MEDIUM_ANOMALY = 240 * np.pi / 180              # радиан
+MEDIUM_ANOMALY = 330 * np.pi / 180              # радиан
 
 # Параметры Земли
 EARTH_MASS = 5.9742 * 1e24                     # кг
